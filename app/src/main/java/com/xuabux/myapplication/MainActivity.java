@@ -3,10 +3,12 @@ package com.xuabux.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PatternMatcher;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText usuario , contraseña,contraseña2,email;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         usuario = findViewById(R.id.Usuario);
         contraseña = findViewById(R.id.Contraseña);
         contraseña2 = findViewById(R.id.Contraseña2);
+
     }
 
 
@@ -36,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         switch (v.getId()) {
             case R.id.BotonRegistro:
              registrar();
+            case R.id.ButtonMap:
+                Intent mapaI = new Intent(this  , MAPA.class);
+                startActivity(mapaI);
         }
 
     }
