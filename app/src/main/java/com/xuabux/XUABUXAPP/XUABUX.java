@@ -24,7 +24,7 @@ public class XUABUX extends AppCompatActivity {
             }
 
             public void onFinish() {
-                Intent registro = new Intent(XUABUX.this  , REGISTRO.class);
+                Intent registro = new Intent(XUABUX.this  , LOGIN.class);
                 startActivity(registro);
             }
         }.start();
