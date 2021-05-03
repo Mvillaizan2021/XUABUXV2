@@ -1,32 +1,21 @@
-package com.xuabux.XUABUXAPP;
+package com.xuabux.XUABUXAPP
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
+import android.content.Intent
+import android.os.Bundle
+import android.os.CountDownTimer
+import androidx.appcompat.app.AppCompatActivity
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.CountDownTimer;
-
-public class XUABUX extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Context context = getApplicationContext();
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
-
-        new CountDownTimer(5000, 1000) {
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-
+class XUABUX : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val context = applicationContext
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_splash_screen)
+        object : CountDownTimer(5000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {}
+            override fun onFinish() {
+                val registro = Intent(this@XUABUX, REGISTRO::class.java)
+                startActivity(registro)
             }
-
-            public void onFinish() {
-                Intent registro = new Intent(XUABUX.this  , REGISTRO.class);
-                startActivity(registro);
-            }
-        }.start();
+        }.start()
     }
 }

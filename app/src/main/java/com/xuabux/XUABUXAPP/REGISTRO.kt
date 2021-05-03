@@ -1,120 +1,100 @@
-package com.xuabux.XUABUXAPP;
+package com.xuabux.XUABUXAPP
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent
+import android.os.Bundle
+import android.util.Patterns
+import android.view.View
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Patterns;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-
-public class REGISTRO extends AppCompatActivity {
-    private FirebaseAuth mAuth;
-    private EditText usuario , contraseña,contraseña2,email;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        mAuth = FirebaseAuth.getInstance();
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        email = findViewById(R.id.Email);
-        usuario = findViewById(R.id.Usuario);
-        contraseña = findViewById(R.id.Contraseña);
-        contraseña2 = findViewById(R.id.Contraseña2);
-
-
+class REGISTRO : AppCompatActivity() {
+    private var mAuth: FirebaseAuth? = null
+    private var usuario: EditText? = null
+    private var contraseña: EditText? = null
+    private var contraseña2: EditText? = null
+    private var email: EditText? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        mAuth = FirebaseAuth.getInstance()
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        email = findViewById(R.id.Email)
+        usuario = findViewById(R.id.Usuario)
+        contraseña = findViewById(R.id.Contraseña)
+        contraseña2 = findViewById(R.id.Contraseña2)
     }
 
-
-    public void onClick(View v){
-        switch (v.getId()) {
-            case R.id.BotonRegistro:
-             registrar();
-            case R.id.ButtonMap:
-                Intent mapaI = new Intent(this  , MAPA.class);
-                startActivity(mapaI);
+    fun onClick(v: View) {
+        when (v.id) {
+            R.id.BotonRegistro -> {
+                registrar()
+                val mapaI = Intent(this, MAPA::class.java)
+                startActivity(mapaI)
+            }
+            R.id.ButtonMap -> {
+                val mapaI = Intent(this, MAPA::class.java)
+                startActivity(mapaI)
+            }
         }
     }
-    void registrar() {
-        String NUsuario = usuario.getText().toString().trim();
-        String Contraseña = contraseña.getText().toString().trim();
-        String Contraseña2 = contraseña2.getText().toString().trim();
-        String Email = email.getText().toString().trim();
-        if (Email.isEmpty()){
-            email.setError("No hay Email");
-            email.requestFocus();
-            return;
-        }
-        if (!Patterns.EMAIL_ADDRESS.matcher(Email).matches()){
-            email.setError("Ingrese un email valido");
-            email.requestFocus();
-            return;
-        }
-        if (NUsuario.isEmpty()){
-            usuario.setError("No hay usuario");
-            usuario.requestFocus();
-            return;
-        }
-        if (Contraseña.isEmpty()){
-            contraseña.setError("No hay contraseña");
-            contraseña.requestFocus();
-            return;
-        }
-        if (Contraseña.length()<6){
-            contraseña.setError("La contraseña es muy corta");
-            contraseña.requestFocus();
-            return;
-        }
-        if (Contraseña2.isEmpty()){
-            contraseña2.setError("No hay contraseña");
-            contraseña2.requestFocus();
-            return;
-        }
-        if (!Contraseña2.equals(Contraseña)){
-            contraseña2.setError("Las contraseñas no coinciden");
-            contraseña2.requestFocus();
-            return;
-        }
-        mAuth.createUserWithEmailAndPassword(Email,Contraseña)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            Usuario usuario = new Usuario(NUsuario,Email);
-                            FirebaseDatabase.getInstance().getReference("Usuarios")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(NUsuario).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
-                                        Toast.makeText(REGISTRO.this,"Registrado Correctamente",Toast.LENGTH_LONG);
 
-                                    }
-                                    else {
-                                        Toast.makeText(REGISTRO.this,"Error de registro",Toast.LENGTH_LONG);
+    fun registrar() {
+        val NUsuario = usuario!!.text.toString().trim { it <= ' ' }
+        val Contraseña = contraseña!!.text.toString().trim { it <= ' ' }
+        val Contraseña2 = contraseña2!!.text.toString().trim { it <= ' ' }
+        val Email = email!!.text.toString().trim { it <= ' ' }
+        if (Email.isEmpty()) {
+            email!!.error = "No hay Email"
+            email!!.requestFocus()
+            return
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(Email).matches()) {
+            email!!.error = "Ingrese un email valido"
+            email!!.requestFocus()
+            return
+        }
+        if (NUsuario.isEmpty()) {
+            usuario!!.error = "No hay usuario"
+            usuario!!.requestFocus()
+            return
+        }
+        if (Contraseña.isEmpty()) {
+            contraseña!!.error = "No hay contraseña"
+            contraseña!!.requestFocus()
+            return
+        }
+        if (Contraseña.length < 6) {
+            contraseña!!.error = "La contraseña es muy corta"
+            contraseña!!.requestFocus()
+            return
+        }
+        if (Contraseña2.isEmpty()) {
+            contraseña2!!.error = "No hay contraseña"
+            contraseña2!!.requestFocus()
+            return
+        }
+        if (Contraseña2 != Contraseña) {
+            contraseña2!!.error = "Las contraseñas no coinciden"
+            contraseña2!!.requestFocus()
+            return
+        }
+        mAuth!!.createUserWithEmailAndPassword(Email, Contraseña)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val usuario = Usuario(NUsuario, Email)
+                        FirebaseDatabase.getInstance().getReference("Usuarios")
+                                .child(FirebaseAuth.getInstance().currentUser.uid).setValue(NUsuario).addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        Toast.makeText(this@REGISTRO, "Registrado Correctamente", Toast.LENGTH_LONG)
+                                    } else {
+                                        Toast.makeText(this@REGISTRO, "Error de registro", Toast.LENGTH_LONG)
                                     }
                                 }
-
-
-                         });
-
-                        }
-                        else {
-                            Toast.makeText(REGISTRO.this,"Error de registro",Toast.LENGTH_LONG);
-                        }
+                    } else {
+                        Toast.makeText(this@REGISTRO, "Error de registro", Toast.LENGTH_LONG)
                     }
-                });
-        }
-
-
+                }
+    }
 }
-
-

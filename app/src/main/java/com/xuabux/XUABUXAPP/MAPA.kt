@@ -1,7 +1,10 @@
 package com.xuabux.XUABUXAPP
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.app.ActivityCompat
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -34,10 +37,20 @@ class MAPA : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        mMap.setMyLocationEnabled(true);
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(4.6381991,-74.0862351)
-        mMap.addMarker(MarkerOptions().position(sydney).title("LA NACHO"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val LA_NACHO = LatLng(4.6381991,-74.0862351)
+        mMap.addMarker(MarkerOptions().position(LA_NACHO).title("LA NACHO"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LA_NACHO))
     }
 }
