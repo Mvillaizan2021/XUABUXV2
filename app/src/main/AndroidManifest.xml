@@ -18,6 +18,7 @@
         android:theme="@style/Theme.MyApplication">
         <activity
             android:name=".LOGIN"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.MyApplication.NoActionBar"
             >></activity>
         <activity android:name=".MENU_PRINCIPAL" />
