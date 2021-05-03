@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         contraseña = findViewById(R.id.Contraseña);
         contraseña2 = findViewById(R.id.Contraseña2);
 
+
     }
 
 
@@ -44,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent mapaI = new Intent(this  , MAPA.class);
                 startActivity(mapaI);
         }
-
     }
     void registrar() {
         String NUsuario = usuario.getText().toString().trim();
