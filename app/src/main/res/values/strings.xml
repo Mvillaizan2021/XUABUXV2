@@ -15,6 +15,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_m_a_p">Mapa</string>
     <string name="GOTOMAP">GOTOMAP</string>
+    <string name="volveratras">Volver</string>
     <string name="INICIAR_VIAJE">INICIAR VIAJE</string>
     <string name="NOSOTROS">NOSOTROS</string>
     <string name="CAMBIAR_USUARIO">CAMBIAR USUARIO</string>

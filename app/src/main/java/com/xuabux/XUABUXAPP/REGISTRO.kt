@@ -37,6 +37,10 @@ class REGISTRO : AppCompatActivity() {
             }
         }
     }
+    fun volverboton(v: View) {
+        val volverb = Intent(this, LOGIN::class.java)
+        startActivity(volverb)
+    }
 
     fun registrar() {
         val NUsuario = usuario!!.text.toString().trim { it <= ' ' }
