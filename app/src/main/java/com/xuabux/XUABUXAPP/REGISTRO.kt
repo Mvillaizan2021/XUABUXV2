@@ -31,10 +31,7 @@ class REGISTRO : AppCompatActivity() {
             R.id.BotonRegistro -> {
                 registrar()
             }
-            R.id.ButtonMap -> {
-                val mapaI = Intent(this, MAPA::class.java)
-                startActivity(mapaI)
-            }
+
         }
     }
     fun volverboton(v: View) {
