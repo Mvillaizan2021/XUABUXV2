@@ -46,10 +46,11 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/LoginBoton"
         android:layout_width="322dp"
         android:layout_height="50dp"
         android:layout_marginTop="36dp"
+        android:onClick="onRegistroIBoton"
         android:text="@string/IniciarBoton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
@@ -57,14 +58,15 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
 
     <Button
-        android:id="@+id/RegistroBoton"
+        android:id="@+id/loginBoton"
         android:layout_width="322dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
+        android:onClick="onRegistroIBoton"
         android:text="@string/RegistroBoton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintTop_toBottomOf="@+id/LoginBoton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,7 +13,7 @@ class XUABUX : AppCompatActivity() {
         object : CountDownTimer(5000, 1000) {
             override fun onTick(millisUntilFinished: Long) {}
             override fun onFinish() {
-                val registro = Intent(this@XUABUX, REGISTRO::class.java)
+                val registro = Intent(this@XUABUX, LOGIN::class.java)
                 startActivity(registro)
             }
         }.start()

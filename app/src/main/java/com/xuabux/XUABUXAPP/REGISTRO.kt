@@ -30,8 +30,6 @@ class REGISTRO : AppCompatActivity() {
         when (v.id) {
             R.id.BotonRegistro -> {
                 registrar()
-                val mapaI = Intent(this, MAPA::class.java)
-                startActivity(mapaI)
             }
             R.id.ButtonMap -> {
                 val mapaI = Intent(this, MAPA::class.java)
