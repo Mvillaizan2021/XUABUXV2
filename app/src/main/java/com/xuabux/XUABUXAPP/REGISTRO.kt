@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import maes.tech.intentanim.CustomIntent.customType
 
 class REGISTRO : AppCompatActivity() {
     private var mAuth: FirebaseAuth? = null
@@ -36,7 +37,12 @@ class REGISTRO : AppCompatActivity() {
     }
     fun volverboton(v: View) {
         val volverb = Intent(this, LOGIN::class.java)
+        volverb.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        volverb.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK );
+        volverb.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(volverb)
+        customType(this,"fadein-to-fadeout")
+
     }
 
     fun registrar() {

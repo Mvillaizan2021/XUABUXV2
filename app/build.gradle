@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.xuabux.myapplication"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -31,6 +31,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.github.hajiyevelnur92:intentanimation:1.0'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
@@ -46,7 +47,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 }
 repositories {
+    maven { url 'https://jitpack.io' }
     mavenCentral()
 }

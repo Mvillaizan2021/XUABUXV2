@@ -19,9 +19,9 @@
 
     <EditText
         android:id="@+id/Email"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="50dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
@@ -34,8 +34,8 @@
 
     <Button
         android:id="@+id/buttonMap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="90dp"
+        android:layout_height="36dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
@@ -47,9 +47,9 @@
 
     <EditText
         android:id="@+id/Contraseña2"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="Repita su contraseña"
         android:inputType="textPassword"
@@ -62,9 +62,9 @@
 
     <Button
         android:id="@+id/BotonRegistro"
-        android:layout_width="198dp"
+        android:layout_width="300dp"
         android:layout_height="45dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="36dp"
         android:onClick="onClick"
         android:scaleX="1"
         android:text="Registrarse"
@@ -75,9 +75,9 @@
 
     <EditText
         android:id="@+id/Usuario"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="Usuario"
         android:inputType="textPersonName"
@@ -90,16 +90,16 @@
 
     <EditText
         android:id="@+id/Contraseña"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="Contraseña"
         android:inputType="textPersonName|textPassword"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Usuario" />
 
