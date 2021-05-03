@@ -1,4 +1,4 @@
-package com.xuabux.myapplication;
+package com.xuabux.XUABUXAPP;
 
 public class Usuario {
     String usuario,email;

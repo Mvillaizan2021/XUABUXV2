@@ -1,20 +1,14 @@
-package com.xuabux.myapplication;
+package com.xuabux.XUABUXAPP;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.os.CountDownTimer;
-import android.view.View;
-import android.widget.Toast;
 
-public class SplashScreen extends AppCompatActivity {
+public class XUABUX extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +24,7 @@ public class SplashScreen extends AppCompatActivity {
             }
 
             public void onFinish() {
-                Intent registro = new Intent(SplashScreen.this  , MainActivity.class);
+                Intent registro = new Intent(XUABUX.this  , REGISTRO.class);
                 startActivity(registro);
             }
         }.start();

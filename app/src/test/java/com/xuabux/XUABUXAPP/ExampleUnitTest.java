@@ -1,4 +1,4 @@
-package com.xuabux.myapplication;
+package com.xuabux.XUABUXAPP;
 
 import org.junit.Test;
 

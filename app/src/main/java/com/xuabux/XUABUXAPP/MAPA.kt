@@ -1,4 +1,4 @@
-package com.xuabux.myapplication
+package com.xuabux.XUABUXAPP
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

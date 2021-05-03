@@ -1,14 +1,12 @@
-package com.xuabux.myapplication;
+package com.xuabux.XUABUXAPP;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PatternMatcher;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -18,7 +16,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity {
+public class REGISTRO extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText usuario , contraseña,contraseña2,email;
 
@@ -97,11 +95,11 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
-                                        Toast.makeText(MainActivity.this,"Registrado Correctamente",Toast.LENGTH_LONG);
+                                        Toast.makeText(REGISTRO.this,"Registrado Correctamente",Toast.LENGTH_LONG);
 
                                     }
                                     else {
-                                        Toast.makeText(MainActivity.this,"Error de registro",Toast.LENGTH_LONG);
+                                        Toast.makeText(REGISTRO.this,"Error de registro",Toast.LENGTH_LONG);
                                     }
                                 }
 
@@ -110,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                         else {
-                            Toast.makeText(MainActivity.this,"Error de registro",Toast.LENGTH_LONG);
+                            Toast.makeText(REGISTRO.this,"Error de registro",Toast.LENGTH_LONG);
                         }
                     }
                 });

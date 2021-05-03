@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xuabux.myapplication" >
+    package="com.xuabux.XUABUXAPP" >
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -30,11 +30,11 @@
             android:value="AIzaSyCcynBp2TY3JVT20q1K25a0VuRxxAfMc9k" />
 
         <activity
-            android:name=".MAPA"
+            android:name="com.xuabux.XUABUXAPP.MAPA"
             android:label="@string/title_activity_m_a_p" >
         </activity>
         <activity
-            android:name=".SplashScreen"
+            android:name="com.xuabux.XUABUXAPP.XUABUX"
             android:label="@string/title_activity_splash_screen"
             android:theme="@style/Theme.MyApplication.NoActionBar" >
             <intent-filter>
@@ -43,7 +43,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" >
+        <activity android:name="com.xuabux.XUABUXAPP.REGISTRO" >
         </activity>
     </application>
 
