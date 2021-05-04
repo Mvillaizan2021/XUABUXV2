@@ -36,19 +36,19 @@ class REGISTRO : AppCompatActivity() {
         }
     }
     fun volverboton(v: View) {
-        val volverb = Intent(this, LOGIN::class.java)
-        volverb.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        volverb.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK );
-        volverb.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(volverb)
+        val VolverIntent = Intent(this, LOGIN::class.java)
+        VolverIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        VolverIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK );
+        VolverIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(VolverIntent)
         customType(this,"fadein-to-fadeout")
 
     }
 
     fun registrar() {
         val NUsuario = usuario!!.text.toString().trim { it <= ' ' }
-        val Contraseña = contraseña!!.text.toString().trim { it <= ' ' }
-        val Contraseña2 = contraseña2!!.text.toString().trim { it <= ' ' }
+        val ContraseñaS = contraseña!!.text.toString().trim { it <= ' ' }
+        val Contraseña2S = contraseña2!!.text.toString().trim { it <= ' ' }
         val Email = email!!.text.toString().trim { it <= ' ' }
         if (Email.isEmpty()) {
             email!!.error = "No hay Email"
@@ -65,27 +65,27 @@ class REGISTRO : AppCompatActivity() {
             usuario!!.requestFocus()
             return
         }
-        if (Contraseña.isEmpty()) {
+        if (ContraseñaS.isEmpty()) {
             contraseña!!.error = "No hay contraseña"
             contraseña!!.requestFocus()
             return
         }
-        if (Contraseña.length < 6) {
+        if (ContraseñaS.length < 6) {
             contraseña!!.error = "La contraseña es muy corta"
             contraseña!!.requestFocus()
             return
         }
-        if (Contraseña2.isEmpty()) {
+        if (Contraseña2S.isEmpty()) {
             contraseña2!!.error = "No hay contraseña"
             contraseña2!!.requestFocus()
             return
         }
-        if (Contraseña2 != Contraseña) {
+        if (Contraseña2S != ContraseñaS) {
             contraseña2!!.error = "Las contraseñas no coinciden"
             contraseña2!!.requestFocus()
             return
         }
-        mAuth!!.createUserWithEmailAndPassword(Email, Contraseña)
+        mAuth!!.createUserWithEmailAndPassword(Email, ContraseñaS)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val usuario = Usuario(NUsuario, Email)

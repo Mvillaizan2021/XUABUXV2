@@ -49,8 +49,8 @@ class MAPA : AppCompatActivity(), OnMapReadyCallback {
         }
         mMap.setMyLocationEnabled(true);
         // Add a marker in Sydney and move the camera
-        val LA_NACHO = LatLng(4.6381991,-74.0862351)
-        mMap.addMarker(MarkerOptions().position(LA_NACHO).title("LA NACHO"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(LA_NACHO))
+        val NachoPos = LatLng(4.6381991,-74.0862351)
+        mMap.addMarker(MarkerOptions().position(NachoPos).title("Universidad Nacional De Colombia"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(NachoPos))
     }
 }

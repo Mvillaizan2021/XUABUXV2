@@ -21,8 +21,8 @@ class LOGIN : AppCompatActivity() {
         }
 
     fun onRegistroIBoton(view: View) {
-        val mapaI = Intent(this, REGISTRO::class.java)
-        startActivity(mapaI)
+        val RegistroIntent = Intent(this, REGISTRO::class.java)
+        startActivity(RegistroIntent)
     }
 
     fun LoginBoton(view: View) {
@@ -51,8 +51,8 @@ class LOGIN : AppCompatActivity() {
         mAuth?.signInWithEmailAndPassword(user,password)?.addOnCompleteListener(this){
             task ->
             if (task.isSuccessful){
-                val mapaI = Intent(this, MAPA::class.java)
-                startActivity(mapaI)
+                val mapaIntent = Intent(this, MAPA::class.java)
+                startActivity(mapaIntent)
 
             }
             else{
