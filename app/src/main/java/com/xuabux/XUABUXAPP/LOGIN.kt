@@ -4,18 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import maes.tech.intentanim.CustomIntent
 
 class LOGIN : AppCompatActivity() {
     private var mAuth: FirebaseAuth? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_l_o_g_i_n)
+        setContentView(R.layout.activity_login)
         mAuth = FirebaseAuth.getInstance()
        
         }
@@ -23,6 +22,7 @@ class LOGIN : AppCompatActivity() {
     fun onRegistroIBoton(view: View) {
         val RegistroIntent = Intent(this, REGISTRO::class.java)
         startActivity(RegistroIntent)
+        CustomIntent.customType(this, "fadein-to-fadeout")
     }
 
     fun LoginBoton(view: View) {
@@ -52,11 +52,14 @@ class LOGIN : AppCompatActivity() {
             task ->
             if (task.isSuccessful){
                 val mapaIntent = Intent(this, MAPA::class.java)
+                mapaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mapaIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK );
+                mapaIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(mapaIntent)
 
             }
             else{
-                Toast.makeText(this@LOGIN, "Error de loggeo", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@LOGIN, "Usuario o contraseña incorrecta.", Toast.LENGTH_LONG).show()
 
             }
         }

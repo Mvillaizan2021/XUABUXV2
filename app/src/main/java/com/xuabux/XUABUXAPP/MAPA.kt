@@ -2,16 +2,17 @@ package com.xuabux.XUABUXAPP
 
 import android.Manifest
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+
 
 class MAPA : AppCompatActivity(), OnMapReadyCallback {
 
@@ -52,5 +53,8 @@ class MAPA : AppCompatActivity(), OnMapReadyCallback {
         val NachoPos = LatLng(4.6381991,-74.0862351)
         mMap.addMarker(MarkerOptions().position(NachoPos).title("Universidad Nacional De Colombia"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(NachoPos))
+
+
+
     }
 }

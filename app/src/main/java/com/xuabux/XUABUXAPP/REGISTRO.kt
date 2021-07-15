@@ -37,12 +37,12 @@ class REGISTRO : AppCompatActivity() {
     }
     fun volverboton(v: View) {
         val VolverIntent = Intent(this, LOGIN::class.java)
-        VolverIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        VolverIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK );
-        VolverIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+          VolverIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+       // VolverIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
         startActivity(VolverIntent)
         customType(this,"fadein-to-fadeout")
-
     }
 
     fun registrar() {
