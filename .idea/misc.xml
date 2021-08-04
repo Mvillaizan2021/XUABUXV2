@@ -5,7 +5,9 @@
       <map>
         <entry key="..\:/Users/valde/StudioProjects/XUABUXV2/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/Users/valde/StudioProjects/XUABUXV2/app/src/main/res/layout/activity_m_a_p.xml" value="0.1" />
-        <entry key="..\:/Users/valde/StudioProjects/XUABUXV2/app/src/main/res/layout/activity_overlay.xml" value="0.1" />
+        <entry key="..\:/Users/valde/StudioProjects/XUABUXV2/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/valde/StudioProjects/XUABUXV2/app/src/main/res/layout/activity_overlay.xml" value="0.15" />
+        <entry key="..\:/Users/valde/StudioProjects/XUABUXV2/app/src/main/res/layout/activity_splash_screen.xml" value="0.1213768115942029" />
         <entry key="..\:/Users/valde/StudioProjects/XUABUXV2/app/src/main/res/layout/content_splash_screen.xml" value="0.1" />
       </map>
     </option>
