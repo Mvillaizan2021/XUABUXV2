@@ -28,6 +28,7 @@ class REGISTRO : AppCompatActivity() {
     }
 
     fun onClick(v: View) {
+
         when (v.id) {
             R.id.BotonRegistro -> {
                 registrar()
@@ -46,6 +47,7 @@ class REGISTRO : AppCompatActivity() {
     }
 
     fun registrar() {
+        val VolverIntent = Intent(this, LOGIN::class.java)
         val NUsuario = usuario!!.text.toString().trim { it <= ' ' }
         val ContraseñaS = contraseña!!.text.toString().trim { it <= ' ' }
         val Contraseña2S = contraseña2!!.text.toString().trim { it <= ' ' }
@@ -90,16 +92,19 @@ class REGISTRO : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val usuario = Usuario(NUsuario, Email)
                         FirebaseDatabase.getInstance().getReference("Usuarios")
-                                .child(FirebaseAuth.getInstance().currentUser.uid).setValue(NUsuario).addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        Toast.makeText(this@REGISTRO, "Registrado Correctamente", Toast.LENGTH_LONG)
-                                    } else {
-                                        Toast.makeText(this@REGISTRO, "Error de registro", Toast.LENGTH_LONG)
-                                    }
-                                }
+                            .child(FirebaseAuth.getInstance().currentUser.uid)
+
+                                Toast.makeText(this@REGISTRO, "Registrado Correctamente", Toast.LENGTH_LONG)
+
+
                     } else {
                         Toast.makeText(this@REGISTRO, "Error de registro", Toast.LENGTH_LONG)
+
+
+
                     }
                 }
+
+        startActivity(VolverIntent)
     }
 }
