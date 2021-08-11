@@ -1,17 +1,20 @@
 package com.xuabux.XUABUXAPP
 
-import android.Manifest
-import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.data.geojson.GeoJsonLayer
+import org.json.JSONException
+import org.json.JSONObject
+import java.lang.StringBuilder
+import java.util.*
 
 
 class MAPA : AppCompatActivity(), OnMapReadyCallback {
@@ -20,11 +23,12 @@ class MAPA : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_m_a_p)
+        setContentView(R.layout.activitymapa)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        Log.d("Xuadebug","Cargado");
     }
 
     /**
@@ -38,23 +42,49 @@ class MAPA : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
-        mMap.setMyLocationEnabled(true);
+        //mMap.isMyLocationEnabled = true;
         // Add a marker in Sydney and move the camera
-        val NachoPos = LatLng(4.6381991,-74.0862351)
-        mMap.addMarker(MarkerOptions().position(NachoPos).title("Universidad Nacional De Colombia"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(NachoPos))
+        val nachoPos = LatLng(4.6381991,-74.0862351)
+        mMap.addMarker(MarkerOptions().position(nachoPos).title("Universidad Nacional De Colombia"))
+
+        mMap.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(
+                    nachoPos.latitude,
+                    nachoPos.longitude
+                ), 12.0f
+            )
+        )
+
+        val res = resources
+        val `is` = res.openRawResource(R.raw.ciclojson)
+        val sc = Scanner(`is`)
+        val builder = StringBuilder()
+        while (sc.hasNextLine()) {
+            builder.append(sc.nextLine())
+        }
+        val js = parseJson(builder.toString())
+        val layer = GeoJsonLayer(mMap, js)
+        layer.defaultLineStringStyle.color= Color.parseColor("#74EA56")
+
+
+        layer.addLayerToMap()
+
 
 
 
     }
+    private fun parseJson(s: String): JSONObject? {
+        val SB = StringBuilder()
+        try {
+            return JSONObject(s)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+
+
+
 }

@@ -2,6 +2,7 @@ package com.xuabux.XUABUXAPP
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.EditText
@@ -16,8 +17,9 @@ class LOGIN : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         mAuth = FirebaseAuth.getInstance()
-       
-        }
+        Log.d("Xuadebug","Cargado");
+
+    }
 
     fun onRegistroIBoton(view: View) {
         val RegistroIntent = Intent(this, REGISTRO::class.java)
@@ -51,7 +53,7 @@ class LOGIN : AppCompatActivity() {
         mAuth?.signInWithEmailAndPassword(user,password)?.addOnCompleteListener(this){
             task ->
             if (task.isSuccessful){
-                val mapaIntent = Intent(this, Overlay::class.java)
+                val mapaIntent = Intent(this, MAPA::class.java)
                 mapaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mapaIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK );
                 mapaIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
