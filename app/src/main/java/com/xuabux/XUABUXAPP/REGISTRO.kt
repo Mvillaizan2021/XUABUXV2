@@ -26,7 +26,7 @@ class REGISTRO : AppCompatActivity() {
         contraseña = findViewById(R.id.Contraseña)
         contraseña2 = findViewById(R.id.Contraseña2)
     }
-
+//funcion para el boton de Registro
     fun onClick(v: View) {
 
         when (v.id) {
@@ -36,6 +36,7 @@ class REGISTRO : AppCompatActivity() {
 
         }
     }
+    //esta es la tipica flecha superior izquierda para regresar a la ventana anterior o en este caso la conveniente
     fun volverboton(v: View) {
         val VolverIntent = Intent(this, LOGIN::class.java)
 
@@ -45,7 +46,7 @@ class REGISTRO : AppCompatActivity() {
         startActivity(VolverIntent)
         customType(this,"fadein-to-fadeout")
     }
-
+//se leen los datos llenados en los campos del registro, en busca de errores con if anidados
     fun registrar() {
         val VolverIntent = Intent(this, LOGIN::class.java)
         val NUsuario = usuario!!.text.toString().trim { it <= ' ' }
@@ -87,6 +88,7 @@ class REGISTRO : AppCompatActivity() {
             contraseña2!!.requestFocus()
             return
         }
+    //Se hace la conexion con el user ID y key de Firebase para guardar los datos
         mAuth!!.createUserWithEmailAndPassword(Email, ContraseñaS)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {

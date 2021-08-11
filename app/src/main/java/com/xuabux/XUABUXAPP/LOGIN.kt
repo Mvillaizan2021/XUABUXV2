@@ -16,17 +16,18 @@ class LOGIN : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        //Llamamos la integracion de FireBase
         mAuth = FirebaseAuth.getInstance()
         Log.d("Xuadebug","Cargado");
 
     }
-
+//no tienes cuenta?, aqui esta el boton que te llevara a la ventana para el registro
     fun onRegistroIBoton(view: View) {
         val RegistroIntent = Intent(this, REGISTRO::class.java)
         startActivity(RegistroIntent)
         CustomIntent.customType(this, "fadein-to-fadeout")
     }
-
+//comparamos los datos ingresado con los dispuestos en la base de datos para dar acceso
     fun LoginBoton(view: View) {
         var usuario: EditText? = null
         usuario = findViewById(R.id.EmailLoginET)
