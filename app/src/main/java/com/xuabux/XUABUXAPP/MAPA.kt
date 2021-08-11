@@ -28,7 +28,7 @@ class MAPA : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        Log.d("Xuadebug","Cargado");
+
     }
 
     /**
@@ -41,48 +41,11 @@ class MAPA : AppCompatActivity(), OnMapReadyCallback {
      * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        //mMap.isMyLocationEnabled = true;
-        // Add a marker in Sydney and move the camera
-        val nachoPos = LatLng(4.6381991,-74.0862351)
-        mMap.addMarker(MarkerOptions().position(nachoPos).title("Universidad Nacional De Colombia"))
-
-        mMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                LatLng(
-                    nachoPos.latitude,
-                    nachoPos.longitude
-                ), 12.0f
-            )
-        )
-
-        val res = resources
-        val `is` = res.openRawResource(R.raw.ciclojson)
-        val sc = Scanner(`is`)
-        val builder = StringBuilder()
-        while (sc.hasNextLine()) {
-            builder.append(sc.nextLine())
-        }
-        val js = parseJson(builder.toString())
-        val layer = GeoJsonLayer(mMap, js)
-        layer.defaultLineStringStyle.color= Color.parseColor("#74EA56")
-
-
-        layer.addLayerToMap()
-
-
+       //...
 
 
     }
-    private fun parseJson(s: String): JSONObject? {
-        val SB = StringBuilder()
-        try {
-            return JSONObject(s)
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-        return null
-    }
+
 
 
 

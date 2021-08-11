@@ -53,7 +53,7 @@ class LOGIN : AppCompatActivity() {
         mAuth?.signInWithEmailAndPassword(user,password)?.addOnCompleteListener(this){
             task ->
             if (task.isSuccessful){
-                val mapaIntent = Intent(this, MAPA::class.java)
+                val mapaIntent = Intent(this, Overlay::class.java)
                 mapaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mapaIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK );
                 mapaIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
