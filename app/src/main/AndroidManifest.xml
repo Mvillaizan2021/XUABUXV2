@@ -23,7 +23,7 @@
         <activity
             android:name=".Overlay"
             android:exported="true"
-            android:theme="@style/Theme.MyApplication.NoActionBar"/>
+            android:theme="@style/Theme.MyApplication.NoActionBar" />
         <activity
             android:name=".LOGIN"
             android:launchMode="singleTop"
