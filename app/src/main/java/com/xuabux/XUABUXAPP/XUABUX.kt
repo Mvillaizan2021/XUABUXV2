@@ -14,7 +14,7 @@ class XUABUX : AppCompatActivity() {
             override fun onTick(millisUntilFinished: Long) {}
             override fun onFinish() {
 
-                val registro = Intent(this@XUABUX, LOGIN::class.java)
+                val registro = Intent(this@XUABUX, Overlay::class.java)
                 registro.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 registro.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK );
                 registro.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
