@@ -25,19 +25,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/overlay" />
 
-    <EditText
-        android:id="@+id/editTextTextPostalAddress"
+
+    <fragment
+        android:id="@+id/autocomplete_fragment"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
         android:layout_width="338dp"
         android:layout_height="45dp"
         android:layout_marginTop="45dp"
         android:ems="10"
         android:hint="⁜  ||  ¿A donde vamos?  ||  •••"
-        android:inputType="textPostalAddress"
         android:textAlignment="center"
         android:textColorHint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="@+id/imageView12"
-        app:layout_constraintTop_toTopOf="@+id/imageView12" />
-
+        app:layout_constraintTop_toTopOf="@+id/imageView12"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

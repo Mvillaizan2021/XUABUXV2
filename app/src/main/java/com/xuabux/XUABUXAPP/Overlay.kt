@@ -35,7 +35,28 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
+import com.google.android.gms.common.api.Status
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener
 import com.google.android.gms.maps.model.*
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.libraries.places.internal.i
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Overlay :  AppCompatActivity(), OnMapReadyCallback {
     var PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
@@ -50,6 +71,8 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback {
     private var likelyPlaceAddresses: Array<String?> = arrayOfNulls(0)
     private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
     private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -57,9 +80,6 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        Places.initialize(applicationContext, "AIzaSyCcynBp2TY3JVT20q1K25a0VuRxxAfMc9k");
-        var placesClient = Places.createClient(this)
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
     }
 
@@ -95,7 +115,73 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback {
 
         mMap = googleMap
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle));
+        val perthLocation = LatLng(-31.90, 115.86)
+        val perth: Marker = mMap.addMarker(
+            MarkerOptions()
+                .position(perthLocation)
+                .visible(false)
+        )
+        mMap.setOnMapLongClickListener { latLng ->
+            perth.isVisible=true
+            perth.position=latLng
+            val bld = LatLngBounds.Builder()
+            val ll = lastKnownLocation?.let {
+                LatLng(
+                    it.latitude,
+                    it.longitude
+                )
+            }
+            bld.include(ll);
+            bld.include(perth.position);
+            val bounds = bld.build()
 
+            mMap.animateCamera(
+                CameraUpdateFactory.newLatLngBounds(bounds, 70)
+            )
+
+        }
+        Places.initialize(applicationContext, "AIzaSyCdl-NC0egFdJGNKzr_0szdcQKiWVXNEto");
+        var placesClient = Places.createClient(this)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
+        val autocompleteFragment =
+            supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
+                    as AutocompleteSupportFragment
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG))
+
+        // Set up a PlaceSelectionListener to handle the response.
+
+// Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+
+                perth.isVisible=true
+                perth.position=place.latLng
+                val bld = LatLngBounds.Builder()
+                val ll = lastKnownLocation?.let {
+                    LatLng(
+                        it.latitude,
+                        it.longitude
+                    )
+                }
+                bld.include(ll);
+                bld.include(perth.position);
+                val bounds = bld.build()
+
+                mMap.animateCamera(
+                    CameraUpdateFactory.newLatLngBounds(bounds, 70)
+                )
+            }
+
+            override fun onError(status: Status) {
+
+                val toast = Toast.makeText(applicationContext, status.statusMessage, Toast.LENGTH_LONG)
+                toast.show()
+            }
+
+        })
         //mMap.isMyLocationEnabled = true;
         // Add a marker in Sydney and move the camera
         val nachoPos = LatLng(4.6381991,-74.0862351)
@@ -118,6 +204,10 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback {
         val js = parseJson(builder.toString())
         val layer = GeoJsonLayer(mMap, js)
         layer.defaultLineStringStyle.color= Color.parseColor("#74EA56")
+        layer.setOnFeatureClickListener { feature ->
+            Log.i("GeoJsonClick", "Feature clicked: ${feature.getProperty("NOMB_TRAMO")}")
+        }
+
         layer.addLayerToMap()
         getLocationPermission()
         // [END_EXCLUDE]
@@ -141,6 +231,7 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback {
         }
         return null
     }
+
     private fun updateLocationUI() {
         if (mMap == null) {
             return
