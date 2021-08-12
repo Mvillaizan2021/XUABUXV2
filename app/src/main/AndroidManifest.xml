@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xuabux.XUABUXAPP">
-
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATIONlocation" />
     <!--
@@ -12,8 +9,11 @@
          location permissions for the "MyLocation" functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    android:screenOrientation="portrait"
+
 
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -41,6 +41,7 @@
             android:value="AIzaSyCcynBp2TY3JVT20q1K25a0VuRxxAfMc9k" />
 
         <activity
+
             android:name=".MAPA"
             android:label="@string/title_activity_m_a_p"
             android:launchMode="singleTop"
