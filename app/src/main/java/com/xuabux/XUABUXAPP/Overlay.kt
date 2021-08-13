@@ -27,12 +27,14 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -45,20 +47,28 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.libraries.places.internal.i
-
-
-
-
-
-
-
-
-
-
-
+import com.google.android.gms.maps.model.Polyline
+import com.google.android.gms.maps.model.PolylineOptions
+import java.util.ArrayList
+import java.util.HashMap
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import java.lang.Exception
 
 
 class Overlay :  AppCompatActivity(), OnMapReadyCallback {
+
+
+    var txtLatInicio: EditText? =
+        null, var txtLongInicio:EditText? = null, var txtLatFinal:EditText? = null, var txtLongFinal:EditText? = null
+
+    var jsonObjectRequest: JsonObjectRequest? = null
+    var request: RequestQueue? = null
+
+
+    null, var longInicial:kotlin.Double? = null, var latFinal:kotlin.Double? = null, var longFinal:kotlin.Double? = null
+}
     var PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
     private lateinit var placesClient: PlacesClient
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -71,7 +81,7 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback {
     private var likelyPlaceAddresses: Array<String?> = arrayOfNulls(0)
     private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
     private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
-
+    private val currentLatLng: LatLng? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -111,7 +121,25 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback {
         }
         updateLocationUI()
     }
+    private fun getDirectionsUrl(origin: LatLng, dest: LatLng): String? {
+
+        val str_origin = "origin=" + origin.latitude + "," + origin.longitude
+
+        val str_dest = "destination=" + dest.latitude + "," + dest.longitude
+
+        val sensor = "sensor=false"
+
+        val parameters = "$str_origin&$str_dest&$sensor"
+
+        val output = "json"
+
+        return "https://maps.googleapis.com/maps/api/directions/$output?$parameters"
+    }
     override fun onMapReady(googleMap: GoogleMap) {
+        var center: LatLng? = null
+        var points: ArrayList<LatLng>? = null
+        var lineOptions: PolylineOptions? = null
+        var latInicial: Double? =
 
         mMap = googleMap
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle));
@@ -221,6 +249,63 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback {
 
 
 
+        //SADSASDFAS
+
+
+        for (i in 0 until PATH.routes.size()) {
+            points = ArrayList<LatLng>()
+            lineOptions = PolylineOptions()
+
+            // Obteniendo el detalle de la ruta
+            val path: List<HashMap<String, String>> = PATH.routes.get(i)
+
+
+            for (j in path.indices) {
+                val point = path[j]
+                val lat = point["lat"]!!.toDouble()
+                val lng = point["lng"]!!.toDouble()
+                val position = LatLng(lat, lng)
+                if (center == null) {
+
+                    center = LatLng(lat, lng)
+                }
+                points.add(position)
+            }
+
+
+            lineOptions.addAll(points)
+
+            lineOptions.width(2f)
+
+            lineOptions.color(Color.BLUE)
+        }
+
+        mMap.addPolyline(lineOptions)
+
+        val origen = LatLng(
+            PATH.coordenadas.getLatitudInicial(),
+            PATH.coordenadas.getLongitudInicial()
+        )
+        mMap.addMarker(
+            MarkerOptions().position(origen).title(
+                "Lat: " + PATH.coordenadas.getLatitudInicial()
+                    .toString() + " - Long: " + PATH.coordenadas.getLongitudInicial()
+            )
+        )
+
+        val destino = LatLng(
+            PATH.coordenadas.getLatitudFinal(),
+            PATH.coordenadas.getLongitudFinal()
+        )
+        mMap.addMarker(
+            MarkerOptions().position(destino).title(
+                "Lat: " + PATH.coordenadas.getLatitudFinal()
+                    .toString() + " - Long: " + PATH.coordenadas.getLongitudFinal()
+            )
+        )
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center, 15f))
+
     }
     private fun parseJson(s: String): JSONObject? {
         val SB = StringBuilder()
@@ -266,6 +351,7 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback {
                             mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 LatLng(lastKnownLocation!!.latitude,
                                     lastKnownLocation!!.longitude), DEFAULT_ZOOM.toFloat()))
+
                         }
                     } else {
                         Log.d("XuaDebug", "Current location is null. Using defaults.")
@@ -293,4 +379,180 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback {
         // Used for selecting the current place.
         private const val M_MAX_ENTRIES = 5
     }
+
+fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
+    val toolbar: Toolbar = findViewById(R.id.toolbar) as Toolbar
+    setSupportActionBar(toolbar)
+    txtLatInicio = findViewById(R.id.txtLatIni) as EditText
+    txtLongInicio = findViewById(R.id.txtLongIni) as EditText
+    txtLatFinal = findViewById(R.id.txtLatFin) as EditText
+    txtLongFinal = findViewById(R.id.txtLongFin) as EditText
+    val fab: FloatingActionButton = findViewById(R.id.fab) as FloatingActionButton
+    fab.setOnClickListener(View.OnClickListener {
+        PATH.coordenadas.setLatitudInicial(java.lang.Double.valueOf(txtLatInicio!!.text.toString()))
+        PATH.coordenadas.setLongitudInicial(
+            java.lang.Double.valueOf(
+                txtLongInicio.getText().toString()
+            )
+        )
+        PATH.coordenadas.setLatitudFinal(
+            java.lang.Double.valueOf(
+                txtLatFinal.getText().toString()
+            )
+        )
+        PATH.coordenadas.setLongitudFinal(
+            java.lang.Double.valueOf(
+                txtLongFinal.getText().toString()
+            )
+        )
+        webServiceObtenerRuta(
+            txtLatInicio!!.text.toString(), txtLongInicio.getText().toString(),
+            txtLatFinal.getText().toString(), txtLongFinal.getText().toString()
+        )
+        val miIntent = Intent(this, Overlay::class.java)
+        startActivity(miIntent)
+    })
+    request = Volley.newRequestQueue(getApplicationContext())
 }
+
+private fun webServiceObtenerRuta(
+    latitudInicial: String,
+    longitudInicial: String,
+    latitudFinal: String,
+    longitudFinal: String
+) {
+    val url =
+        ("https://maps.googleapis.com/maps/api/directions/json?origin=" + latitudInicial + "," + longitudInicial
+                + "&destination=" + latitudFinal + "," + longitudFinal)
+    jsonObjectRequest =
+        JsonObjectRequest(Request.Method.GET, url, null, object : Listener<JSONObject?>() {
+            fun onResponse(response: JSONObject) {
+                var jRoutes: JSONArray? = null
+                var jLegs: JSONArray? = null
+                var jSteps: JSONArray? = null
+                try {
+                    jRoutes = response.getJSONArray("routes")
+                    /** Traversing all routes  */
+                    for (i in 0 until jRoutes.length()) {
+                        jLegs = (jRoutes[i] as JSONObject).getJSONArray("legs")
+                        val path: MutableList<HashMap<String, String>> = ArrayList()
+                        /** Traversing all legs  */
+                        for (j in 0 until jLegs.length()) {
+                            jSteps = (jLegs[j] as JSONObject).getJSONArray("steps")
+                            /** Traversing all steps  */
+                            for (k in 0 until jSteps.length()) {
+                                var polyline = ""
+                                polyline =
+                                    ((jSteps[k] as JSONObject)["polyline"] as JSONObject)["points"] as String
+                                val list = decodePoly(polyline)
+                                /** Traversing all points  */
+                                for (l in list!!.indices) {
+                                    val hm = HashMap<String, String>()
+                                    hm["lat"] = java.lang.Double.toString(list[l].latitude)
+                                    hm["lng"] = java.lang.Double.toString(list[l].longitude)
+                                    path.add(hm)
+                                }
+                            }
+                            PATH.routes.add(path)
+                        }
+                    }
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                } catch (e: Exception) {
+                }
+            }
+        }, object : ErrorListener() {
+            fun onErrorResponse(error: VolleyError) {
+                Toast.makeText(
+                    getApplicationContext(),
+                    "No se puede conectar " + error.toString(),
+                    Toast.LENGTH_LONG
+                ).show()
+                println()
+                Log.d("ERROR: ", error.toString())
+            }
+        }
+        )
+    request.add(jsonObjectRequest)
+}
+fun parse(jObject: JSONObject): List<List<HashMap<String?, String?>?>?>? {
+    //Este método PARSEA el JSONObject que retorna del API de Rutas de Google devolviendo
+    //una lista del lista de HashMap Strings con el listado de Coordenadas de Lat y Long,
+    //con la cual se podrá dibujar pollinas que describan la ruta entre 2 puntos.
+    var jRoutes: JSONArray? = null
+    var jLegs: JSONArray? = null
+    var jSteps: JSONArray? = null
+    try {
+        jRoutes = jObject.getJSONArray("routes")
+        /** Traversing all routes  */
+        for (i in 0 until jRoutes.length()) {
+            jLegs = (jRoutes[i] as JSONObject).getJSONArray("legs")
+            val path: MutableList<HashMap<String, String>> = ArrayList()
+            /** Traversing all legs  */
+            for (j in 0 until jLegs.length()) {
+                jSteps = (jLegs[j] as JSONObject).getJSONArray("steps")
+                /** Traversing all steps  */
+                for (k in 0 until jSteps.length()) {
+                    var polyline = ""
+                    polyline =
+                        ((jSteps[k] as JSONObject)["polyline"] as JSONObject)["points"] as String
+                    val list = decodePoly(polyline)
+                    /** Traversing all points  */
+                    for (l in list!!.indices) {
+                        val hm = HashMap<String, String>()
+                        hm["lat"] = java.lang.Double.toString(list[l].latitude)
+                        hm["lng"] = java.lang.Double.toString(list[l].longitude)
+                        path.add(hm)
+                    }
+                }
+                PATH.routes.add(path)
+            }
+        }
+    } catch (e: JSONException) {
+        e.printStackTrace()
+    } catch (e: Exception) {
+    }
+    return PATH.routes
+}
+
+
+    }
+}
+    private fun decodePoly(encoded: String): List<LatLng>? {
+        val poly: MutableList<LatLng> = ArrayList()
+        var index = 0
+        val len = encoded.length
+        var lat = 0
+        var lng = 0
+        while (index < len) {
+            var b: Int
+            var shift = 0
+            var result = 0
+            do {
+                b = encoded[index++].toInt() - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlat = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lat += dlat
+            shift = 0
+            result = 0
+            do {
+                b = encoded[index++].toInt() - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lng += dlng
+            val p = LatLng(
+                lat.toDouble() / 1E5,
+                lng.toDouble() / 1E5
+            )
+            poly.add(p)
+        }
+        return poly
+    }
+
+
