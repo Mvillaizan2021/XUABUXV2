@@ -1,61 +1,41 @@
 package com.xuabux.XUABUXAPP
 
-import afu.org.checkerframework.checker.nullness.qual.NonNull
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Color
-import kotlin.*
-import androidx.appcompat.app.AppCompatActivity
+import android.location.Location
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.directions.route.*
+import com.google.android.gms.common.api.Status
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.maps.android.data.geojson.GeoJsonLayer
-import com.xuabux.XUABUXAPP.R
-import org.json.JSONException
-import org.json.JSONObject
-import java.lang.StringBuilder
-import java.util.*
-import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
+import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.DialogInterface
-import android.content.pm.PackageManager
-import android.location.Location
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.FrameLayout
-import android.widget.TextView
-import android.widget.Toast
-import com.directions.route.*
-import com.google.android.gms.common.api.Status
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener
-import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.libraries.places.internal.i
-import com.google.android.gms.maps.model.Polyline
-
 import com.google.android.material.snackbar.Snackbar
+import com.google.maps.android.data.geojson.GeoJsonLayer
+import com.google.maps.android.data.geojson.GeoJsonPolygon
+import org.json.JSONException
+import org.json.JSONObject
+import java.util.*
+import kotlin.*
+import com.google.android.gms.maps.model.LatLng
 
-import com.google.android.libraries.places.internal.e
-import com.google.android.gms.maps.CameraUpdate
-import com.google.android.gms.maps.model.PolylineOptions
-import com.google.common.collect.Iterables.size
-import java.nio.file.Files.size
+import com.google.maps.android.data.geojson.GeoJsonLineString
+import com.google.maps.android.data.geojson.GeoJsonMultiLineString
 
 
 class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
@@ -73,8 +53,9 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
     private var likelyPlaceAddresses: Array<String?> = arrayOfNulls(0)
     private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
     private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
+    private var puntosderuta: MutableList<LatLng?> = ArrayList()
     private var polyline: Polyline? = null
-
+    private var layer : GeoJsonLayer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -201,13 +182,35 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
             builder.append(sc.nextLine())
         }
         val js = parseJson(builder.toString())
-        val layer = GeoJsonLayer(mMap, js)
-        layer.defaultLineStringStyle.color= Color.parseColor("#74EA56")
-        layer.setOnFeatureClickListener { feature ->
-            Log.i("GeoJsonClick", "Feature clicked: ${feature.getProperty("NOMB_TRAMO")}")
+
+        layer = GeoJsonLayer(mMap, js)
+        for (feature in layer!!.features) {
+
+            if ("LineString".equals(feature.geometry.geometryType, ignoreCase = true)) {
+                val coordinates = (feature.geometry as GeoJsonLineString).coordinates
+                for (x in coordinates){
+                    puntosderuta.add(x)
+                }
+
+            } else if ("MultiLineString".equals(
+                    feature.geometry.geometryType,
+                    ignoreCase = true
+                )
+            ) {
+                for (linestring in (feature.geometry as GeoJsonMultiLineString).getLineStrings()) {
+                    val coordinates = linestring.coordinates
+                    for (x in coordinates){
+                        puntosderuta.add(x)
+                    }
+                }
+            }
+
         }
 
-        layer.addLayerToMap()
+        layer!!.defaultLineStringStyle.color= Color.parseColor("#74EA56")
+
+        layer!!.addLayerToMap()
+
         getLocationPermission()
         // [END_EXCLUDE]
 
@@ -221,6 +224,7 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
 
 
     }
+
     private fun parseJson(s: String): JSONObject? {
         val SB = StringBuilder()
         try {
@@ -301,14 +305,55 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
     var locationPermission = false
     private var polylines: List<Polyline>? = null
     fun Findroutes(Start: LatLng?, End: LatLng?) {
+        var closestLocationStart: LatLng? = null
+        var smallestDistanceStart = -1f
+
+        for(location in puntosderuta){
+            val distance = FloatArray(1)
+            if (Start != null && location != null) {
+                Location.distanceBetween(
+                    Start.latitude,
+                    Start.longitude,
+                    location.latitude,
+                    location.longitude,
+                    distance
+                );
+            }
+            if (distance != null) {
+                if(smallestDistanceStart == -1f || distance.last() < smallestDistanceStart) {
+                    closestLocationStart = location
+                    smallestDistanceStart = distance.last()
+                }
+            }
+        }
+
+        var closestLocationEnd: LatLng? = null
+        var smallestDistanceEnd = -1f
+
+        for(location in puntosderuta){
+            val distance = FloatArray(1)
+            if (End != null && location != null) {
+                    Location.distanceBetween(End.latitude,End.longitude,location.latitude,location.longitude,distance)
+
+            };
+            if (distance != null) {
+                if(smallestDistanceEnd == -1f || distance.last() < smallestDistanceEnd) {
+                    closestLocationEnd = location
+                    smallestDistanceEnd = distance.last()
+                }
+            }
+        }
+
+
         if (Start == null || End == null) {
             Toast.makeText(this@Overlay, "Unable to get location", Toast.LENGTH_LONG).show()
         } else {
+
             val routing = Routing.Builder()
-                .travelMode(AbstractRouting.TravelMode.DRIVING)
+                .travelMode(AbstractRouting.TravelMode.WALKING)
                 .withListener(this)
                 .alternativeRoutes(true)
-                .waypoints(Start, End)
+                .waypoints(Start,closestLocationStart,closestLocationEnd ,End)
                 .key("AIzaSyCdl-NC0egFdJGNKzr_0szdcQKiWVXNEto")
                 .build()
             routing.execute()
@@ -322,7 +367,7 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
     }
 
     override fun onRoutingStart() {
-        Toast.makeText(this,"Finding Route...",Toast.LENGTH_LONG).show()
+        Toast.makeText(this,"Calculando ruta...",Toast.LENGTH_LONG).show()
     }
 
     override fun onRoutingSuccess(p0: ArrayList<Route>?, p1: Int) {
