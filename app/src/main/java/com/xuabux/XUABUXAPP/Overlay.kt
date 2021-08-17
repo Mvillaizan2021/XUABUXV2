@@ -59,6 +59,8 @@ import java.nio.file.Files.size
 
 
 class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
+
+
     var PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
     private lateinit var placesClient: PlacesClient
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -71,7 +73,7 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
     private var likelyPlaceAddresses: Array<String?> = arrayOfNulls(0)
     private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
     private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
-
+    private var polyline: Polyline? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -131,6 +133,7 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
                     it.longitude
                 )
             }
+            Findroutes(ll,perth.position)
             bld.include(ll);
             bld.include(perth.position);
             val bounds = bld.build()
@@ -156,6 +159,7 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
 // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
+                val sydney = LatLng(-33.852, 151.211)
 
                 perth.isVisible=true
                 perth.position=place.latLng
@@ -166,6 +170,8 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
                         it.longitude
                     )
                 }
+
+                Findroutes(ll,perth.position)
                 bld.include(ll);
                 bld.include(perth.position);
                 val bounds = bld.build()
@@ -173,6 +179,7 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
                 mMap.animateCamera(
                     CameraUpdateFactory.newLatLngBounds(bounds, 70)
                 )
+
             }
 
             override fun onError(status: Status) {
@@ -184,15 +191,7 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
         })
         //mMap.isMyLocationEnabled = true;
         // Add a marker in Sydney and move the camera
-        val nachoPos = LatLng(4.6381991,-74.0862351)
-        mMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                LatLng(
-                    nachoPos.latitude,
-                    nachoPos.longitude
-                ), 12.0f
-            )
-        )
+
 
         val res = resources
         val `is` = res.openRawResource(R.raw.ciclojson)
@@ -310,7 +309,7 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
                 .withListener(this)
                 .alternativeRoutes(true)
                 .waypoints(Start, End)
-                .key("AIzaSyCcynBp2TY3JVT20q1K25a0VuRxxAfMc9k")
+                .key("AIzaSyCdl-NC0egFdJGNKzr_0szdcQKiWVXNEto")
                 .build()
             routing.execute()
         }
@@ -318,7 +317,7 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
 
     override fun onRoutingFailure(p0: RouteException?) {
         val parentLayout = findViewById<View>(android.R.id.content)
-        val snackbar: Snackbar = Snackbar.make(parentLayout, toString(), Snackbar.LENGTH_LONG)
+        val snackbar: Snackbar = Snackbar.make(parentLayout, p0.toString(), Snackbar.LENGTH_LONG)
         snackbar.show()
     }
 
@@ -330,28 +329,35 @@ class Overlay :  AppCompatActivity(), OnMapReadyCallback, RoutingListener {
         val route = p0
         val shortestRouteIndex = p1
         var i =0
+        /*
         val center = CameraUpdateFactory.newLatLng(start)
         val zoom = CameraUpdateFactory.zoomTo(16f)
+        */
+
         if(polylines!=null) {
             polylines = null
+
+
         }
+
         val polyOptions = PolylineOptions()
         val polylineStartLatLng: LatLng? = null
         val polylineEndLatLng: LatLng? = null
         polylines = ArrayList()
         val rz= route?.size
+
         for ((i,value)in route?.withIndex()!!) {
 
             if(i==shortestRouteIndex)
             {
-                polyOptions.color(3)
+                polyOptions.color(Color.RED)
                 polyOptions.width(5F)
                 polyOptions.addAll(route?.get(shortestRouteIndex)?.getPoints());
-                val polyline =  mMap.addPolyline(polyOptions)
-                val polylineStartLatLng=polyline.getPoints().get(0);
-                val k=polyline.getPoints().size
-                val polylineEndLatLng=polyline.getPoints().get(k-1);
-                (polylines as ArrayList<Polyline>).add(polyline);
+                polyline?.remove()
+
+                polyline =  mMap.addPolyline(polyOptions)
+
+
 
             }
 
